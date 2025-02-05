@@ -1,3 +1,10 @@
+//
+//  DIDefinition.swift
+//  SettingApp
+//
+//  Created by 0v0 on 2025/02/05.
+//
+
 final class DIDefinition {
     
     func inject() {

@@ -1,3 +1,12 @@
+//
+//  DIError.swift
+//  SettingApp
+//
+//  Created by 0v0 on 2025/02/05.
+//
+
+import Foundation
+
 enum DIError: LocalizedError {
     case alreadyRegistered(_ type: Any.Type)
     case notRegistered(_ type: Any.Type)

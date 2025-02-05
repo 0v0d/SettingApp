@@ -1,3 +1,12 @@
+//
+//  SettingsSectionView.swift
+//  SettingApp
+//
+//  Created by 0v0 on 2025/02/05.
+//
+
+import SwiftUI
+
 struct SettingsSectionView
 <T: RawRepresentable & CaseIterable & Equatable>: View {
     let title: String

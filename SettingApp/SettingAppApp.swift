@@ -6,27 +6,25 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct SettingAppApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    
+    init() {
+        DIDefinition().inject()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(
+                viewModel: DIContainer.shared.resolve(SettingsViewModel.self)
+            )
         }
-        .modelContainer(sharedModelContainer)
     }
+}
+
+#Preview {
+    ContentView(
+        viewModel: DIContainer.shared.resolve(SettingsViewModel.self)
+    )
 }

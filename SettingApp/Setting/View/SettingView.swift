@@ -1,3 +1,12 @@
+//
+//  SettingView.swift
+//  SettingApp
+//
+//  Created by 0v0 on 2025/02/05.
+//
+
+import SwiftUI
+
 struct SettingView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: SettingsViewModel
