@@ -10,10 +10,11 @@ import SwiftUI
 struct ContentView: View {
     @State private var showingSetting = false
     @ObservedObject var viewModel: SettingsViewModel
-    
+    @StateObject private var counterViewModel = DIContainer.shared.resolve(CounterViewModel.self)
+
     var body: some View {
         NavigationStack {
-            CounterView()
+            CounterView(viewModel: counterViewModel)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
@@ -31,11 +32,9 @@ struct ContentView: View {
             viewModel.themeMode == .system ? nil : (viewModel.themeMode == .dark ? .dark : .light)
             
         )
-        
+        .environment(\.locale, viewModel.languageConfig.locale)
     }
 }
-
-
 
 #Preview {
     ContentView(

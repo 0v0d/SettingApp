@@ -20,7 +20,7 @@ final class SettingsViewModel: ObservableObject {
     }
     
     let themeModes: [ThemeMode] = [.system, .light, .dark]
-    let languageConfigs: [LanguageConfig] = [.en, .ja]
+    let languageConfigs: [LanguageConfig] = [.english, .japanese]
     
     func updateThemeMode(_ mode: ThemeMode) {
         themeMode = mode

@@ -5,14 +5,16 @@
 //  Created by 0v0 on 2025/02/05.
 //
 
+import SwiftUICore
+
 enum ThemeMode: String, CaseIterable {
     case system, light, dark
     
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
-        case .system: return "System"
-        case .light: return "Light"
-        case .dark: return "Dark"
+        case .system: return "system"
+        case .light: return "light"
+        case .dark: return "dark"
         }
     }
 }

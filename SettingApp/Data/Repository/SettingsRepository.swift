@@ -20,22 +20,34 @@ private enum UserDefaultsKeys {
 }
 
 final class UserDefaultsSettingsRepository: SettingsRepository {
-    @AppStorage(UserDefaultsKeys.themeMode) private var themeMode: String = ThemeMode.system.rawValue
-    @AppStorage(UserDefaultsKeys.languageConfig) private var languageConfig = LanguageConfig.en.rawValue
-    
+    private let userDefaults: UserDefaults
+
+    init(userDefaults: UserDefaults = .standard) {
+        self.userDefaults = userDefaults
+    }
+
     func getThemeMode() -> ThemeMode {
-        return ThemeMode(rawValue: themeMode) ?? .system
+        guard let rawValue = userDefaults.string(forKey: UserDefaultsKeys.themeMode),
+              let mode = ThemeMode(rawValue: rawValue) else {
+            return .system
+        }
+        return mode
     }
-    
+
     func setThemeMode(_ mode: ThemeMode) {
-        themeMode = mode.rawValue
+        userDefaults.set(mode.rawValue, forKey: UserDefaultsKeys.themeMode)
     }
-    
+
     func getLanguageConfig() -> LanguageConfig {
-        return LanguageConfig(rawValue: languageConfig) ?? .en
+        guard let rawValue = userDefaults.string(forKey: UserDefaultsKeys.languageConfig),
+              let config = LanguageConfig(rawValue: rawValue) else {
+            return .english
+        }
+        return config
     }
-    
+
     func setLanguageConfig(_ config: LanguageConfig) {
-        languageConfig = config.rawValue
+        userDefaults.set(config.rawValue, forKey: UserDefaultsKeys.languageConfig)
     }
 }
+

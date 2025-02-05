@@ -14,11 +14,17 @@ final class DIDefinition {
             UserDefaultsSettingsRepository.self,
             impl: UserDefaultsSettingsRepository()
         )
+        
         dependecies.register(
             SettingsViewModel.self,
             impl: SettingsViewModel(
                 repository: dependecies.resolve(UserDefaultsSettingsRepository.self)
             )
+        )
+        
+        dependecies.register(
+            CounterViewModel.self,
+            impl: CounterViewModel()
         )
     }
 }

@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct CounterView: View {
-    @StateObject private var viewModel = CounterViewModel()
+    @ObservedObject var viewModel: CounterViewModel
     
     var body: some View {
-        
         VStack(spacing: 30) {
-            Text("\(viewModel.count)")
+            Text(viewModel.count.description)
                 .font(.system(size: 70, weight: .bold))
             
             HStack(spacing: 30) {
@@ -36,7 +35,7 @@ struct CounterView: View {
             Button(action: {
                 viewModel.reset()
             }) {
-                Text("Reset")
+                Text("reset")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -77,5 +76,9 @@ struct CircularButtonView: View {
 }
 
 #Preview {
-    CounterView()
+    CounterView(
+        viewModel: DIContainer.shared.resolve(
+            CounterViewModel.self
+        )
+    )
 }

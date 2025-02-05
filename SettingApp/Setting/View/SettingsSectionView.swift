@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SettingsSectionView
 <T: RawRepresentable & CaseIterable & Equatable>: View {
-    let title: String
+    let title: LocalizedStringKey
     let items: [T]
-    let itemTitle: (T) -> String
+    let itemTitle: (T) -> LocalizedStringKey
     let onSelect: (T) -> Void
     let firstIndex: Int
     @State private var selectedIndex: Int = 0
