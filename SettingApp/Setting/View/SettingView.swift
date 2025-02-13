@@ -50,7 +50,7 @@ struct SettingView: View {
                     Text("app_settings")
                 }
             }
-            .padding(.top, -40)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("settings")
@@ -75,7 +75,8 @@ struct SettingView: View {
 
 #Preview {
     SettingView(
-        viewModel: DIContainer.shared.resolve(
-            SettingsViewModel.self)
+        viewModel: SettingsViewModel(repository: UserDefaultsSettingsRepository(
+            userDefaults: .standard
+        ))
     )
 }
