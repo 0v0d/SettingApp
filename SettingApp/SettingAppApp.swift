@@ -35,7 +35,7 @@ struct SettingAppApp: App {
 }
 
 #Preview {
-    ContentView(
-        viewModel: DIContainer.shared.resolve(SettingsViewModel.self)
+    ContentView( viewModel: SettingsViewModel(repository: UserDefaultsSettingsRepository(
+        userDefaults: .standard))
     )
 }
