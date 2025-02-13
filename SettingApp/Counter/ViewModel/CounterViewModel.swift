@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class CounterViewModel: ObservableObject {
     @Published private(set) var count = 0
     

@@ -8,36 +8,29 @@
 import Foundation
 
 final class DIContainer {
-    static let shared = DIContainer()
+    public static let shared: DIContainer = .init()
+    private var dependencies: [ObjectIdentifier: Any] = [:]
     
-    private var dependencies: [DIKey: Any] = [:]
-    private let lock = DispatchQueue(label: "com.di.container.lock")
+    public static func createTestContainer() -> DIContainer {
+        return DIContainer()
+    }
     
     private init() {}
     
-    func register<T>(
-        _ type: T.Type,
-        impl: T
-    ) {
-        let dependencyKey = DIKey( type)
-        
-        lock.sync {
-            if dependencies[dependencyKey] == nil {
-                dependencies[dependencyKey] = impl
-            } else {
-                fatalError(DIError.alreadyRegistered(type).localizedDescription)
-            }
+    public func register<T>(type: T.Type, factory: @escaping () -> T) {
+        let key = ObjectIdentifier(type)
+        if dependencies[key] == nil {
+            dependencies[key] = factory
+        } else {
+            fatalError(DIError.alreadyRegistered(type).localizedDescription)
         }
     }
-    
-    func resolve<T>(_ type: T.Type) -> T {
-        let dependencyKey = DIKey(type)
-        
-        return lock.sync {
-            guard let dependency = dependencies[dependencyKey] as? T else {
-                fatalError(DIError.notRegistered(type).localizedDescription)
-            }
-            return dependency
+     
+    public func resolve<T>(_ type: T.Type) -> T {
+        let key = ObjectIdentifier(type)
+        guard let factory = dependencies[key] as? () -> T else {
+            fatalError(DIError.notRegistered(type).localizedDescription)
         }
+        return factory()
     }
 }

@@ -9,16 +9,27 @@ import SwiftUI
 
 @main
 struct SettingAppApp: App {
+    private let diContainer: DIContainer
+    @State private var isInitialized = false
     
     init() {
-        DIDefinition().inject()
+        diContainer = DIContainer.shared
     }
     
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                viewModel: DIContainer.shared.resolve(SettingsViewModel.self)
-            )
+            if isInitialized {
+                ContentView(
+                    viewModel: diContainer.resolve(SettingsViewModel.self)
+                )
+            } else {
+                ProgressView()
+                    .task {
+                        let diDefinition = DIDefinition(diContainer: diContainer)
+                        await diDefinition.inject()
+                        isInitialized = true
+                    }
+            }
         }
     }
 }
