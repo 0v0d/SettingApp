@@ -8,7 +8,13 @@
 import SwiftUI
 
 struct CounterView: View {
-    @ObservedObject var viewModel: CounterViewModel
+    @StateObject private var viewModel: CounterViewModel
+
+    init() {
+        _viewModel = StateObject(
+            wrappedValue: DIContainer.shared.resolve(CounterViewModel.self)
+        )
+    }
     
     var body: some View {
         VStack(spacing: 30) {
@@ -16,14 +22,12 @@ struct CounterView: View {
                 .font(.system(size: 70, weight: .bold))
             
             HStack(spacing: 30) {
-                // Decrement Button
                 CircularButtonView(
                     systemImageName: "minus",
                     backgroundColor: .red,
                     action: { viewModel.decrement() }
                 )
                 
-                // Increment Button
                 CircularButtonView(
                     systemImageName: "plus",
                     backgroundColor: .green,
@@ -31,7 +35,6 @@ struct CounterView: View {
                 )
             }
             
-            // Reset Button with gradient and shadow
             Button(action: {
                 viewModel.reset()
             }) {
@@ -76,9 +79,5 @@ struct CircularButtonView: View {
 }
 
 #Preview {
-    CounterView(
-        viewModel: DIContainer.shared.resolve(
-            CounterViewModel.self
-        )
-    )
+    CounterView()
 }

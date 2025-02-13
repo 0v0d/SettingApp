@@ -6,25 +6,29 @@
 //
 
 final class DIDefinition {
+    private let diContainer: DIContainer
     
-    func inject() {
-        let dependecies = DIContainer.shared
+    init(diContainer: DIContainer) {
+        self.diContainer = diContainer
+    }
+    
+    @MainActor
+    func inject() async {
+        // UserDefaultsSettingsRepositoryの登録
+        diContainer.register(type: UserDefaultsSettingsRepository.self) {
+            UserDefaultsSettingsRepository()
+        }
         
-        dependecies.register(
-            UserDefaultsSettingsRepository.self,
-            impl: UserDefaultsSettingsRepository()
-        )
-        
-        dependecies.register(
-            SettingsViewModel.self,
-            impl: SettingsViewModel(
-                repository: dependecies.resolve(UserDefaultsSettingsRepository.self)
+        // SettingsViewModelの登録
+        diContainer.register(type: SettingsViewModel.self) { [diContainer] in
+            SettingsViewModel(
+                repository: diContainer.resolve(UserDefaultsSettingsRepository.self)
             )
-        )
+        }
         
-        dependecies.register(
-            CounterViewModel.self,
-            impl: CounterViewModel()
-        )
+        // CounterViewModelの登録
+        diContainer.register(type: CounterViewModel.self) {
+            CounterViewModel()
+        }
     }
 }

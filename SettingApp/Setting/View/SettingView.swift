@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct SettingView: View {
-    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: SettingsViewModel
     @State private var isChecked = true
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -38,7 +40,7 @@ struct SettingView: View {
                     Section("language") {
                         Button("open_settings") {
                             if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                openURL(url)
                             }
                         }
                     }
@@ -46,8 +48,7 @@ struct SettingView: View {
                 
                 Toggle(isOn: $isChecked) {
                     Text("app_settings")
-                }.toggleStyle(.switch)
-                
+                }
             }
             .padding(.top, -40)
             .toolbar {
@@ -65,7 +66,7 @@ struct SettingView: View {
             .preferredColorScheme(
                 viewModel.themeMode == .system ? nil : (
                     viewModel.themeMode == .dark ? .dark : .light
-                )
+                    )
             )
             .animation(.easeInOut, value: viewModel.themeMode)
         }
