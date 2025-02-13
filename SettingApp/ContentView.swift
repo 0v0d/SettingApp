@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var viewModel: SettingsViewModel
     @State private var showingSetting = false
-    @ObservedObject var viewModel: SettingsViewModel
-
+    
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         NavigationStack {
             CounterView()
@@ -35,8 +39,9 @@ struct ContentView: View {
         .environment(\.locale, viewModel.languageConfig.locale)
     }
 }
+
 #Preview {
-    ContentView(
-        viewModel:DIContainer.shared.resolve(SettingsViewModel.self)
+    ContentView( viewModel: SettingsViewModel(repository: UserDefaultsSettingsRepository(
+        userDefaults: .standard))
     )
 }

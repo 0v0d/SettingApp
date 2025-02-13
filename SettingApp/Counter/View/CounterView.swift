@@ -9,13 +9,18 @@ import SwiftUI
 
 struct CounterView: View {
     @StateObject private var viewModel: CounterViewModel
-
-    init() {
-        _viewModel = StateObject(
-            wrappedValue: DIContainer.shared.resolve(CounterViewModel.self)
-        )
-    }
     
+    init() {
+        #if DEBUG
+            _viewModel = StateObject(wrappedValue: CounterViewModel())
+        #else
+            _viewModel = StateObject(
+                wrappedValue:DIContainer.shared.resolve(
+                    CounterViewModel.self)
+            )
+        #endif
+    }
+
     var body: some View {
         VStack(spacing: 30) {
             Text(viewModel.count.description)
@@ -35,9 +40,37 @@ struct CounterView: View {
                 )
             }
             
-            Button(action: {
-                viewModel.reset()
-            }) {
+            ResetButton(reset: viewModel.reset)
+        }
+    }
+}
+
+extension CounterView{
+    
+    private struct CircularButtonView: View {
+        let systemImageName: String
+        let backgroundColor: Color
+        let action: () -> Void
+        
+        var body: some View {
+            Button(action: action) {
+                Image(systemName: systemImageName)
+                    .font(.system(size: 30, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 100, height: 100)
+                    .background(backgroundColor)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+    
+    private struct ResetButton: View {
+        let reset: () -> Void
+        
+        var body : some View {
+            Button(action: reset) {
                 Text("reset")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -55,26 +88,6 @@ struct CounterView: View {
             }
             .padding(.top, 20)
         }
-        
-    }
-}
-
-struct CircularButtonView: View {
-    let systemImageName: String
-    let backgroundColor: Color
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemImageName)
-                .font(.system(size: 30, weight: .bold))
-                .foregroundColor(.white)
-                .frame(width: 100, height: 100)
-                .background(backgroundColor)
-                .clipShape(Circle())
-                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
